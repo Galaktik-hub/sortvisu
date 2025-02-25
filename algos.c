@@ -3,6 +3,15 @@
 #include <stdlib.h>
 #include <time.h>
 
+bool is_sorted(int arr[], size_t n) {
+    size_t i;
+    for (i = 0; i < n; i++) {
+        if (arr[i] > arr[i + 1])
+            return false;
+    }
+    return true;
+}
+
 void swap(int* x, int* y){
     int tmp = *x;
     *x = *y;
@@ -47,11 +56,31 @@ void bubble_sort(int arr[], size_t n) {
 }
 
 void selection_sort(int arr[], size_t n) {
-    // TODO : Implémenter le selection sort
+    size_t i, j;
+    int min;
+    for (i = 0; i <= n - 2; i++) {
+        min = i;
+        for (j = i + 1; j <= n - 1; j++) {
+            if (arr[j] < arr[min])
+                min = j;
+        }
+        if (min != i)
+            swap(&arr[min], &arr[i]);
+    }
 }
 
 void insertion_sort(int arr[], size_t n) {
-    // TODO : Implémenter le insertion sort
+    size_t i, j;
+    int x;
+    for (i = 1; i < n; i ++) {
+        x = arr[i];
+        j = i;
+        while (j > 0 && arr[j - 1] > x) {
+            arr[j] = arr[j - 1];
+            j--;
+        }
+        arr[j] = x;
+    }
 }
 
 void quick_sort(int arr[], int low, int high) {
@@ -60,6 +89,16 @@ void quick_sort(int arr[], int low, int high) {
 
 void merge_sort(int arr[], size_t n) {
     // TODO : Implémenter le merge sort
+}
+
+void bogo_sort(int arr[], size_t n) {
+    while(!is_sorted(arr, n)) {
+        shuffle_arr(arr, n);
+    }
+}
+
+void stalin_sort(int arr[], size_t n) {
+    // TODO : Implémenter le stalin sort
 }
 
 int main() {
@@ -79,7 +118,7 @@ int main() {
     printf("Bubble sort :\n");
     print_arr(arr, n);
 
-    /*shuffle_arr(arr, n);
+    shuffle_arr(arr, n);
     selection_sort(arr, n);
     printf("Selection sort :\n");
     print_arr(arr, n);
@@ -97,7 +136,17 @@ int main() {
     shuffle_arr(arr, n);
     merge_sort(arr, n);
     printf("Merge sort :\n");
-    print_arr(arr, n);*/
+    print_arr(arr, n);
+
+    shuffle_arr(arr, n);
+    merge_sort(arr, n);
+    printf("Bogo sort :\n");
+    print_arr(arr, n);
+
+    shuffle_arr(arr, n);
+    merge_sort(arr, n);
+    printf("Stalin sort :\n");
+    print_arr(arr, n);
 
     return 0;
 }
