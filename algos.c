@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-bool is_sorted(int arr[], size_t n) {
+int is_sorted(int arr[], size_t n) {
     size_t i;
     for (i = 0; i < n; i++) {
         if (arr[i] > arr[i + 1])
-            return false;
+            return 0;
     }
-    return true;
+    return 1;
 }
 
 void swap(int* x, int* y){
@@ -56,8 +56,7 @@ void bubble_sort(int arr[], size_t n) {
 }
 
 void selection_sort(int arr[], size_t n) {
-    size_t i, j;
-    int min;
+    size_t i, j, min;
     for (i = 0; i <= n - 2; i++) {
         min = i;
         for (j = i + 1; j <= n - 1; j++) {
@@ -92,13 +91,27 @@ void merge_sort(int arr[], size_t n) {
 }
 
 void bogo_sort(int arr[], size_t n) {
-    while(!is_sorted(arr, n)) {
+    while(is_sorted(arr, n) == 0) {
         shuffle_arr(arr, n);
     }
 }
 
 void stalin_sort(int arr[], size_t n) {
-    // TODO : Implémenter le stalin sort
+    if (n == 0) 
+        return;
+    
+    size_t j = 1;
+    for (size_t i = 1; i < n; i++) {
+        if (arr[i] >= arr[j - 1]) {
+            arr[j] = arr[i];
+            j++;
+        }
+    }
+    
+    // Les éléments après j ne sont pas nécessaires
+    for (size_t i = j; i < n; i++) {
+        arr[i] = 0; // Optionnel : marquer les valeurs supprimées
+    }
 }
 
 int main() {
@@ -139,12 +152,12 @@ int main() {
     print_arr(arr, n);
 
     shuffle_arr(arr, n);
-    merge_sort(arr, n);
+    bogo_sort(arr, n);
     printf("Bogo sort :\n");
     print_arr(arr, n);
 
     shuffle_arr(arr, n);
-    merge_sort(arr, n);
+    stalin_sort(arr, n);
     printf("Stalin sort :\n");
     print_arr(arr, n);
 
