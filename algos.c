@@ -1,9 +1,8 @@
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-int is_sorted(int arr[], size_t n) {
+int isSorted(int arr[], size_t n) {
     size_t i;
     for (i = 0; i < n; i++) {
         if (arr[i] > arr[i + 1])
@@ -19,7 +18,7 @@ void swap(int* x, int* y){
 }
 
 
-void shuffle_arr(int arr[], size_t n) {
+void shuffleArr(int arr[], size_t n) {
     if (n > 1) {
         for (size_t i = 0; i < n - 1; i++) {
             size_t j = i + rand() % (n - i);
@@ -28,7 +27,7 @@ void shuffle_arr(int arr[], size_t n) {
     }
 }
 
-void print_arr(int arr[], size_t n) {
+void printArr(int arr[], size_t n) {
     if (n == 0)
         return;
     
@@ -38,24 +37,24 @@ void print_arr(int arr[], size_t n) {
     printf("%d\n", arr[n - 1]);
 }
 
-void bubble_sort(int arr[], size_t n) {
+void bubbleSort(int arr[], size_t n) {
     size_t i, j;
-    bool swapped;
+    int swapped;
     for (i = 0; i < n - 1; i++) {
-        swapped = false;
+        swapped = 0;
         for (j = 0; j < n - i - 1; j++) {
             if (arr[j] > arr[j + 1]) {
                 swap(&arr[j], &arr[j + 1]);
-                swapped = true;
+                swapped = 1;
             }
         }
 
-        if (swapped == false)
+        if (swapped == 0)
             break;
     }
 }
 
-void selection_sort(int arr[], size_t n) {
+void selectionSort(int arr[], size_t n) {
     size_t i, j, min;
     for (i = 0; i <= n - 2; i++) {
         min = i;
@@ -68,7 +67,7 @@ void selection_sort(int arr[], size_t n) {
     }
 }
 
-void insertion_sort(int arr[], size_t n) {
+void insertionSort(int arr[], size_t n) {
     size_t i, j;
     int x;
     for (i = 1; i < n; i ++) {
@@ -82,23 +81,42 @@ void insertion_sort(int arr[], size_t n) {
     }
 }
 
-void quick_sort(int arr[], int low, int high) {
-    // TODO : Implémenter le quick sort
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+
+    int i, j;
+    i = low;
+    for (j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            swap(&arr[i], &arr[j]);
+            i++;
+        }
+    }
+
+    swap(&arr[i], &arr[high]);
+    return i;
 }
 
-void merge_sort(int arr[], size_t n) {
+void quickSort(int arr[], int low, int high) {
+    if (low >= high || low < 0)
+        return;
+
+    int p = partition(arr, low, high);
+    quickSort(arr, low, p - 1);
+    quickSort(arr, p + 1, high);
+}
+
+void mergeSort(int arr[], size_t n) {
     // TODO : Implémenter le merge sort
 }
 
-void bogo_sort(int arr[], size_t n) {
-    while(is_sorted(arr, n) == 0) {
-        shuffle_arr(arr, n);
-    }
+void heapSort(int arr[], size_t n) {
+    // TODO : Implémenter le heap sort
 }
 
-void stalin_sort(int arr[], size_t n) {
+int stalinSort(int arr[], size_t n) {
     if (n == 0) 
-        return;
+        return n;
     
     size_t j = 1;
     for (size_t i = 1; i < n; i++) {
@@ -108,9 +126,16 @@ void stalin_sort(int arr[], size_t n) {
         }
     }
     
-    // Les éléments après j ne sont pas nécessaires
     for (size_t i = j; i < n; i++) {
-        arr[i] = 0; // Optionnel : marquer les valeurs supprimées
+        arr[i] = 0;
+    }
+
+    return j;
+}
+
+void bogoSort(int arr[], size_t n) {
+    while(isSorted(arr, n) == 0) {
+        shuffleArr(arr, n);
     }
 }
 
@@ -121,45 +146,50 @@ int main() {
     size_t n = sizeof(arr) / sizeof(arr[0]);
 
     printf("Original arr :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
-    shuffle_arr(arr, n);
+    shuffleArr(arr, n);
     printf("Shuffled arr :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
-    bubble_sort(arr, n);
+    bubbleSort(arr, n);
     printf("Bubble sort :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
-    shuffle_arr(arr, n);
-    selection_sort(arr, n);
+    shuffleArr(arr, n);
+    selectionSort(arr, n);
     printf("Selection sort :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
-    shuffle_arr(arr, n);
-    insertion_sort(arr, n);
+    shuffleArr(arr, n);
+    insertionSort(arr, n);
     printf("Insertion sort :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
-    shuffle_arr(arr, n);
-    quick_sort(arr, 0, n - 1);
+    shuffleArr(arr, n);
+    quickSort(arr, 0, n - 1);
     printf("Quick sort :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
-    shuffle_arr(arr, n);
-    merge_sort(arr, n);
+    shuffleArr(arr, n);
+    mergeSort(arr, n);
     printf("Merge sort :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
-    shuffle_arr(arr, n);
-    bogo_sort(arr, n);
+    shuffleArr(arr, n);
+    heapSort(arr, n);
+    printf("Heap sort :\n");
+    printArr(arr, n);
+
+    shuffleArr(arr, n);
+    //bogoSort(arr, n);
     printf("Bogo sort :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
-    shuffle_arr(arr, n);
-    stalin_sort(arr, n);
+    shuffleArr(arr, n);
+    n = stalinSort(arr, n);
     printf("Stalin sort :\n");
-    print_arr(arr, n);
+    printArr(arr, n);
 
     return 0;
 }
