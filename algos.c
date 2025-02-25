@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+/*** Global functions ***/
+
 int isSorted(int arr[], size_t n) {
     size_t i;
     for (i = 0; i < n; i++) {
@@ -37,6 +39,8 @@ void printArr(int arr[], size_t n) {
     printf("%d\n", arr[n - 1]);
 }
 
+/*** Bubble Sort ***/
+
 void bubbleSort(int arr[], size_t n) {
     size_t i, j;
     int swapped;
@@ -54,6 +58,8 @@ void bubbleSort(int arr[], size_t n) {
     }
 }
 
+/*** Selection Sort ***/
+
 void selectionSort(int arr[], size_t n) {
     size_t i, j, min;
     for (i = 0; i <= n - 2; i++) {
@@ -66,6 +72,8 @@ void selectionSort(int arr[], size_t n) {
             swap(&arr[min], &arr[i]);
     }
 }
+
+/*** Insertion Sort ***/
 
 void insertionSort(int arr[], size_t n) {
     size_t i, j;
@@ -80,6 +88,8 @@ void insertionSort(int arr[], size_t n) {
         arr[j] = x;
     }
 }
+
+/*** Quick Sort ***/
 
 int partition(int arr[], int low, int high) {
     int pivot = arr[high];
@@ -106,13 +116,65 @@ void quickSort(int arr[], int low, int high) {
     quickSort(arr, p + 1, high);
 }
 
-void mergeSort(int arr[], size_t n) {
-    // TODO : Implémenter le merge sort
+/*** Merge Sort ***/
+
+void merge(int arr[], int left, int mid, int right) {
+    int i, j, k;
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    int L[n1], R[n2];
+
+    for (i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    i = 0;
+    j = 0;
+    k = left;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
 }
+
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        merge(arr, left, mid, right);
+    }
+}
+
+/*** Heap Sort ***/
 
 void heapSort(int arr[], size_t n) {
     // TODO : Implémenter le heap sort
 }
+
+/*** Stalin Sort ***/
 
 int stalinSort(int arr[], size_t n) {
     if (n == 0) 
@@ -133,11 +195,15 @@ int stalinSort(int arr[], size_t n) {
     return j;
 }
 
+/*** Bogo Sort ***/
+
 void bogoSort(int arr[], size_t n) {
     while(isSorted(arr, n) == 0) {
         shuffleArr(arr, n);
     }
 }
+
+/*** Main ***/
 
 int main() {
     srand(time(NULL));
@@ -172,7 +238,7 @@ int main() {
     printArr(arr, n);
 
     shuffleArr(arr, n);
-    mergeSort(arr, n);
+    mergeSort(arr, 0, n - 1);
     printf("Merge sort :\n");
     printArr(arr, n);
 
