@@ -1,6 +1,15 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
+/*** Defines ***/
+
+#define iLeftChild(i) 2*i + 1
+
+#define iRightChild(i) 2*i + 2
+
+#define iParent(i) floor((i-1) / 2)
 
 /*** Global functions ***/
 
@@ -170,8 +179,40 @@ void mergeSort(int arr[], int left, int right) {
 
 /*** Heap Sort ***/
 
-void heapSort(int arr[], size_t n) {
-    // TODO : Implémenter le heap sort
+void siftDown(int arr[], size_t root, size_t end) {
+    while (iLeftChild(root) < end) {
+        size_t child = iLeftChild(root);
+        if (child + 1 < end && arr[child] < arr[child + 1])
+            child++;
+        
+        if (arr[root] < arr[child]) {
+            swap(&arr[root], &arr[child]);
+            root = child;
+        } else {
+            return;
+        }
+    }
+}
+
+
+void heapify(int arr[], size_t count) {
+    size_t start = iParent(count - 1) + 1;
+
+    while (start > 0) {
+        start--;
+        siftDown(arr, start, count);
+    }
+}
+
+void heapSort(int arr[], size_t count) {
+    heapify(arr, count);
+
+    size_t end = count;
+    while (end > 0) {
+        end--;
+        swap(&arr[end], &arr[0]);
+        siftDown(arr, 0, end);
+    }
 }
 
 /*** Stalin Sort ***/
@@ -208,7 +249,7 @@ void bogoSort(int arr[], size_t n) {
 int main() {
     srand(time(NULL));
 
-    int arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    int arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -1};
     size_t n = sizeof(arr) / sizeof(arr[0]);
 
     printf("Original arr :\n");
@@ -248,7 +289,7 @@ int main() {
     printArr(arr, n);
 
     shuffleArr(arr, n);
-    //bogoSort(arr, n);
+    bogoSort(arr, n);
     printf("Bogo sort :\n");
     printArr(arr, n);
 
